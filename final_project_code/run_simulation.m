@@ -10,8 +10,8 @@
 setpath                                     % add AutoDerived, Modeling, and Visualization folders to Matlab path
 
 p = parameters();                           % get parameters from file
-z0 = [0; pi/9; 0 ;0; 0];                    % set initial state
-% Note: 5th state is the integral of torque squared over time
+z0 = [0; 1; 0 ;0];                    % set initial state [x,y,th1,th2]
+
 % An equation has been added to dynamics_continuous and dynamics_discrete
 % to integrate this new state.
 
@@ -62,16 +62,22 @@ ctrl.T = [x(3) x(4) x(5)];                               % control values
 disp("Here");
 % Plot COM for your submissions
 
+% p   = [m1 m2 m3 I1 I2 I3 c1 c2 l1 l2 g]';        % parameters
 figure(1)
-l = p(1);
-c1 = p(2);
-c2 = p(3);
-m1 = p(4);
-m2 = p(5);
-mh = p(6);
-y = z(1,:);
-th = z(2,:);
-ycm = (((y+c1*sin(th))*m1) + ((y+(l+c2)*sin(th))*m2) + ((y+2*l*sin(th))*mh))/(m1+m2+mh);
+l1 = p(9);
+l2 = p(10);
+c1 = p(7);
+c2 = p(8);
+m1 = p(1);
+m2 = p(2);
+m3 = p(3);
+x = z(1,:);
+y = z(2,:);
+th1 = z(3,:);
+th2 = z(4,:); % changed these
+ycm = (((y+c1*sin(th1))*m1) + ((y+l1*sin(th1))*m2) + ((y+l1*sin(th1)+c2*sin(th1+th2))*m3))/(m1+m2+m3);
+xcm = (((x+c1*cos(th1))*m1) + ((x+l1*cos(th1))*m2) + ((x+l1*cos(th1)+c2*cos(th1+th2))*m3))/(m1+m2+m3);
+
 time = z(5,:);
 plot(time,ycm);
 xlabel('Time (s)')

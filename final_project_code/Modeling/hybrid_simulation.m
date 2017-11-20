@@ -1,6 +1,6 @@
 function [tout, zout, uout, indices, sols] = hybrid_simulation(z0,ctrl,p,tspan)
 %Inputs:
-% z0 - the initial state
+% z0 - the initial state [x,y,th1,th2,dx,dy,dth1,dth2]
 % ctrl- control structure
 % p - simulation parameters
 % tspan - [t0 tf] where t0 is start time, tf is end time
