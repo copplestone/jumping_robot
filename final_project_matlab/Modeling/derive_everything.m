@@ -12,7 +12,7 @@ q   = [x ; y ; th1  ; th2 ];      % generalized coordinates
 dq  = [dx ; dy ; dth1 ; dth2];    % first time derivatives
 ddq = [ddx ; ddy ; ddth1;ddth2];  % second time derivatives
 u   = [tau];     % controls
-F   = [Fx ; Fy];
+Fc   = [Fx ; Fy];
 
 p   = [m1 m2 m3 I1 I2 I3 c1 c2 l1 l2 g]';        % parameters
 
@@ -35,17 +35,17 @@ er2hat = cos(th1+th2)*ihat + sin(th1+th2) * jhat;
 ddt = @(r) jacobian(r,[q;dq])*[dq;ddq]; 
 
 % Define vectors to key points.
-rA = x+ihat + y*jhat;
-rcm1 = rA + c1*er1hat;
-rB = rA + l1*er1hat;
-rcm2 = rB + c2*er2hat;
-rC = rB + l2*er2hat;
-keypoints = [rA rB rC];
+rA = x+ihat + y*jhat; %vector to moving origin of flip bot
+rcm1 = rA + c1*er1hat; %center of mass on first bar
+rB = rA + l1*er1hat; %vector to middle pivot joint on robot
+rcm2 = rB + c2*er2hat; %vector to center of mass on top bar
+rC = rB + l2*er2hat; %vector to tip of top bar
+keypoints = [rA rB rC]; %bottom point, middle pivot, top point
 
 % Take time derivatives of vectors as required for kinetic energy terms.
-drcm1 = ddt(rcm1);
-drcm2 = ddt(rcm2);
-drcm3 = ddt(rB);
+drcm1 = ddt(rcm1); %mass source 1, bottom bar, 
+drcm2 = ddt(rcm2); %mass source 2, motor, 
+drcm3 = ddt(rB);   %mass source 3 top bar
 
 %%% Calculate Kinetic Energy, Potential Energy, and Generalized Forces
 
@@ -84,7 +84,7 @@ V = V1 + V2 + V3;
 Q = QF + Qtau;
 
 % Calculate rcm, the location of the center of mass
-rcm = (m1*rcm1 + m2*rB + m3+rcm3)/(m1+m2+m3);
+rcm = (m1*rcm1 + m2*rB + m3+rcm2)/(m1+m2+m3);
 
 % Assemble C, the set of constraints
 C = y;  % When y = 0, the constraint is satisfied because foot is on the ground
@@ -105,8 +105,8 @@ b = A*ddq - eom;
 
 %%% Write functions to evaluate dynamics, etc...
 z = sym(zeros(length([q;dq]),1)); % initialize the state vector
-z(1:2,1) = q;  
-z(3:4,1) = dq;
+z(1:4,1) = q;  
+z(5:8,1) = dq;
 
 % Write functions to a separate folder because we don't usually have to see them
 directory = '../AutoDerived/';
