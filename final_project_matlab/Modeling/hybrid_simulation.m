@@ -81,13 +81,13 @@ function [dz, Fc] = dynamics_continuous(t,z,ctrl,p,iphase)
     end
     
     A = A_jumping_leg(z,p);                 % get full A matrix
-    b = b_jumping_leg(z,u,Fc,p);               % get full b vector
+    b = b_jumping_leg(z,u,[0;Fc],p);               % get full b vector
     
     x = A\b;                % solve system for accelerations (and possibly forces)
-    dz(1:2,1) = z(3:4); % assign velocities to time derivative of state vector
-    dz(3:4,1) = x(1:2);   % assign accelerations to time derivative of state vector
+    dz(1:4,1) = z(5:8); % assign velocities to time derivative of state vector
+    dz(5:8,1) = x(1:4);   % assign accelerations to time derivative of state vector
 
-    dz(5) = 1;              % change to integrate torque squared
+    %dz(9) = 1;              % change to integrate torque squared
 end
 
 %% Control
@@ -100,8 +100,8 @@ function u = control_laws(t,z,ctrl,p,iphase)
     else
         
         % PD Control in flight
-        th = z(2,:);            % leg angle
-        dth = z(4,:);           % leg angular velocity
+        th = z(3,:);            % leg angle
+        dth = z(7,:);           % leg angular velocity
 
         thd = pi/4;             % desired leg angle
         k = 5;                  % stiffness (N/rad)

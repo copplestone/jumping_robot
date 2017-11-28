@@ -38,14 +38,14 @@ ddt = @(r) jacobian(r,[q;dq])*[dq;ddq];
 rA = x+ihat + y*jhat; %vector to moving origin of flip bot
 rcm1 = rA + c1*er1hat; %center of mass on first bar
 rB = rA + l1*er1hat; %vector to middle pivot joint on robot
-rcm2 = rB + c2*er2hat; %vector to center of mass on top bar
+rcm3 = rB + c2*er2hat; %vector to center of mass on top bar
 rC = rB + l2*er2hat; %vector to tip of top bar
 keypoints = [rA rB rC]; %bottom point, middle pivot, top point
 
 % Take time derivatives of vectors as required for kinetic energy terms.
 drcm1 = ddt(rcm1); %mass source 1, bottom bar, 
-drcm2 = ddt(rcm2); %mass source 2, motor, 
-drcm3 = ddt(rB);   %mass source 3 top bar
+drcm2 = ddt(rB); %mass source 2, motor, 
+drcm3 = ddt(rcm3);   %mass source 3 top bar
 
 %%% Calculate Kinetic Energy, Potential Energy, and Generalized Forces
 
@@ -70,12 +70,12 @@ T3 = (1/2)*m3*dot(drcm3, drcm3) +  (1/2)* I3 * (dth1+dth2)^2;
 % energy storage elements.
 V1 = m1*g*dot(rcm1, jhat);
 V2 = m2*g*dot(rB, jhat);
-V3 = m3*g*dot(rcm2, jhat);
+V3 = m3*g*dot(rcm3, jhat);
 
 % Define contributions to generalized forces.  See Lecture 6 formulas for
 % contributions to generalized forces.
 QF = F2Q(Fx*ihat + Fy*jhat,rA); 
-Qtau = M2Q(-tau*khat, -((dth1+dth2)*khat)); %???????????????????????
+Qtau = M2Q(-tau*khat, -((dth1+dth2)*khat)); %??
 
 % Sum kinetic energy terms, potential energy terms, and generalized force
 % contributions.
@@ -84,7 +84,7 @@ V = V1 + V2 + V3;
 Q = QF + Qtau;
 
 % Calculate rcm, the location of the center of mass
-rcm = (m1*rcm1 + m2*rB + m3+rcm2)/(m1+m2+m3);
+rcm = (m1*rcm1 + m2*rB + m3+rcm3)/(m1+m2+m3);
 
 % Assemble C, the set of constraints
 C = y;  % When y = 0, the constraint is satisfied because foot is on the ground

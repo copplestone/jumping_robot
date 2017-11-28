@@ -1,5 +1,6 @@
 % p   = [m1 m2 m3 I1 I2 I3 c1 c2 l1 l2 g]';        % parameters
 
+
 function p = parameters() 
  l1 = .20;
  l2 = 0.2;

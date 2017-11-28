@@ -10,7 +10,8 @@
 setpath                                     % add AutoDerived, Modeling, and Visualization folders to Matlab path
 
 p = parameters();                           % get parameters from file
-z0 = [0; 1; 0 ;0];                    % set initial state [x,y,th1,th2]
+%z0 = [0; 1; 0 ;0];                    % set initial state [x,y,th1,th2]
+z0 = [0;1;pi/2;0;0;0;0;0];
 
 % An equation has been added to dynamics_continuous and dynamics_discrete
 % to integrate this new state.
@@ -78,7 +79,7 @@ th2 = z(4,:); % changed these
 ycm = (((y+c1*sin(th1))*m1) + ((y+l1*sin(th1))*m2) + ((y+l1*sin(th1)+c2*sin(th1+th2))*m3))/(m1+m2+m3);
 xcm = (((x+c1*cos(th1))*m1) + ((x+l1*cos(th1))*m2) + ((x+l1*cos(th1)+c2*cos(th1+th2))*m3))/(m1+m2+m3);
 
-time = z(5,:);
+time = t;%z(5,:);
 plot(time,ycm);
 xlabel('Time (s)')
 ylabel('Height of center of mass (m)');
