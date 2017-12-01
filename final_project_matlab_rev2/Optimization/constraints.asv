@@ -21,17 +21,29 @@ function [cineq ceq] = constraints(x,z0,p)
 % functions with ode45().
     tf = x(1);
     ctrl.tf = x(2);
-    ctrl.T = [x(3) x(4) x(5)];
+    ctrl.T = [x(3) x(4) x(5) x(6) x(7)];
+    ctrl.Ang = x(8:12);
     [t, z, u, indices] = hybrid_simulation(z0,ctrl,p,[0 tf]);
-    th = z(2,:);
-    z_final = z(:,end);
-    com = COM_jumping_leg(z_final,p);
-    com_end = com(2);
+    th = z(3,:);
+    dth = z(7,:);
+    %z_final = z(:,end);
+    %com = COM_jumping_leg(z_final,p);
+    %com_end = com(2);
     th_min = min(th);
     th_max = max(th);
-    cineq = [ -th_min, th_max-pi/2];                                          
-    ceq = [x(2)-x(1),com_end-0.4];                                           
+     j = z(:,end);
+    pB = pointB_jumping_leg(j,p);
+    
+       j = z(:,end);
+    com = COM_jumping_leg(j,p);
+    
+    cineq = [-pB(2)+0.05];%[th-(pi/2)];%[ -th_min, th_max-pi/2]; 
+    %cineq = [ th, -2*pi]; 
+    ceq = [];%[dth];%[x(2)-x(1),dth];%com_end-0.4];                                           
                                                             
 % simply comment out any alternate constraints when not in use
+ 
+
+% disp('made constraints')
     
 end

@@ -2,17 +2,17 @@ function derive_everything()
 name = 'jumping_leg';
 
 % Define variables for time, generalized coordinates + derivatives, controls, and parameters 
-syms t  x y th1 th2 dx dy dth1 dth2 ddx ddy ddth1 ddth2 real
+syms t  X Y th1 th2 dx dy dth1 dth2 ddx ddy ddth1 ddth2 real
 syms m1 m2 m3 I1 I2 I3 c1 c2 g real % set I2 to zero for now though, motor as a point mass
 syms l1 l2 real 
-syms tau Fx Fy real
+syms tau F_ax F_ay F_bx F_by F_cx F_cy real
 
 % Group them
-q   = [x ; y ; th1  ; th2 ];      % generalized coordinates
+q   = [X ; Y ; th1  ; th2 ];      % generalized coordinates
 dq  = [dx ; dy ; dth1 ; dth2];    % first time derivatives
 ddq = [ddx ; ddy ; ddth1;ddth2];  % second time derivatives
 u   = [tau];     % controls
-Fc   = [Fx ; Fy];
+Fc   = [F_ax ; F_ay; F_bx; F_by; F_cx; F_cy];
 
 p   = [m1 m2 m3 I1 I2 I3 c1 c2 l1 l2 g]';        % parameters
 
@@ -35,7 +35,7 @@ er2hat = cos(th1+th2)*ihat + sin(th1+th2) * jhat;
 ddt = @(r) jacobian(r,[q;dq])*[dq;ddq]; 
 
 % Define vectors to key points.
-rA = x+ihat + y*jhat; %vector to moving origin of flip bot
+rA = X*ihat + Y*jhat; %vector to moving origin of flip bot
 rcm1 = rA + c1*er1hat; %center of mass on first bar
 rB = rA + l1*er1hat; %vector to middle pivot joint on robot
 rcm3 = rB + c2*er2hat; %vector to center of mass on top bar
@@ -74,8 +74,8 @@ V3 = m3*g*dot(rcm3, jhat);
 
 % Define contributions to generalized forces.  See Lecture 6 formulas for
 % contributions to generalized forces.
-QF = F2Q(Fx*ihat + Fy*jhat,rA); 
-Qtau = M2Q(-tau*khat, -((dth1+dth2)*khat)); %??
+QF = F2Q(F_ax*ihat + F_ay*jhat,rA) + F2Q(F_bx*ihat+F_by*jhat,rB)+F2Q(F_cx*ihat+F_cy*jhat,rC); 
+Qtau = M2Q(-tau*khat, -((dth2)*khat)); %??
 
 % Sum kinetic energy terms, potential energy terms, and generalized force
 % contributions.
@@ -87,8 +87,19 @@ Q = QF + Qtau;
 rcm = (m1*rcm1 + m2*rB + m3+rcm3)/(m1+m2+m3);
 
 % Assemble C, the set of constraints
-C = y;  % When y = 0, the constraint is satisfied because foot is on the ground
+C = Y;  % When y = 0, the constraint is satisfied because foot is on the ground
 dC= ddt(C);
+
+% other point constraints
+pointC = rC;
+d_pointC = ddt(rC);
+
+pointB = rB;
+d_pointB = ddt(rB);
+
+pointA = rA;%Y;
+d_pointA = ddt(rA);%ddt(C);
+
 
 %% All the work is done!  Just turn the crank...
 %%% Derive Energy Function and Equations of Motion
@@ -119,8 +130,14 @@ matlabFunction(b,'file',[directory 'b_' name],'vars',{z u Fc p});
 
 matlabFunction(keypoints,'file',[directory 'keypoints_' name],'vars',{z p});
 
-matlabFunction(C,'file',[directory 'C_' name],'vars',{z u p});
-matlabFunction(dC,'file',[directory 'dC_' name],'vars',{z u p});
+matlabFunction(pointA,'file',[directory 'pointA_' name],'vars',{z p});
+matlabFunction(d_pointA,'file',[directory 'd_pointA_' name],'vars',{z p});
+
+matlabFunction(pointB,'file',[directory 'pointB_' name],'vars',{z p});
+matlabFunction(d_pointB,'file',[directory 'd_pointB_' name],'vars',{z p});
+
+matlabFunction(pointC,'file',[directory 'pointC_' name],'vars',{z p});
+matlabFunction(d_pointC,'file',[directory 'd_pointC_' name],'vars',{z p});
 
 % Write a function to evaluate the X and Y coordinates and speeds of the center of mass given the current state and parameters
 drcm = ddt(rcm);             % Calculate center of mass velocity vector
