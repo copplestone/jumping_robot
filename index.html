@@ -25,11 +25,41 @@
 
 <h3>Forward pike</h3>
 <p>This is the gymnastics drill that we're trying to recreate</p>
- <iframe style="float: left; width:50%; height:48.5%; margin-left: 25%" src="https://www.youtube.com/embed/Bnztr7qCEwE"></iframe> <p style="clear: both;">
+ <iframe style="float: left; width:50%; height:48.5%; margin-left: 25%" src="https://www.youtube.com/embed/Bnztr7qCEwE"></iframe> <p style="clear: both;"><br>
+ <p>We modelled this by simpifying the free body diagram as follows.</p>
 
-<h3>Test jumps</h3>
-<img src="images/testjump1.gif" style="float: left; width: 46%; margin-left: 1%; margin-bottom: 0.5em;">
-<img src="images/testjump2.gif" style="float: left; width: 51%; margin-left: 1%; margin-bottom: 0.5em;">
+ <img src="images/motion.png" style="float: left; width: 40%; margin-left: 30%; margin-bottom: 0.5em;">
+<p style="clear: both;">
+
+<h3>Hypotheses</h3>
+<p>We were interested in how torque and stiffness affected jumping success and came up with the following hypotheses.</p>
+<img src="images/hypotheses.png" style="float: left; width: 60%; margin-left: 20%; margin-bottom: 0.5em;">
+<p style="clear: both;">
+
+<h3>Simulation</h3>
+<p>Our simulation is based off the following kinematics.</p>
+<img src="images/kinematics.png" style="float: left; width: 30%; margin-left: 35%; margin-bottom: 0.5em;">
+<p style="clear: both;">
+
+<p>And we parameterized the problem as follows to be simulated and optimized in Matlab.</p>
+
+<img src="images/parameters.png" style="float: left; width: 60%; margin-left: 20%; margin-bottom: 0.5em;">
+<p style="clear: both;">
+
+<p>These videos show the output of our optimizations, the video on the left is optimized for stiffness, the video on the right is optimized for torque.</p>
+
+<video width="49%" height="50%" style="float: left;margin-left: 0.5%; margin-top:0px; margin-bottom: 0.0em;" controls muted loop>
+  <source src="images/stiffness_simulation.mov">
+  Your browser does not support the video tag.
+</video>
+<video width="49%" height="50%" style="float: left;margin-left: 0.5%; margin-top:0px; margin-bottom: 0.0em;" controls muted loop>
+  <source src="images/torque_simulation.mov">
+  Your browser does not support the video tag.
+</video>
+<p style="clear: both;"><br>
+
+<h3>Design</h3>
+<img src="images/hardware_diagram.png" style="float: left; width: 40%; margin-left: 30%; margin-bottom: 0.5em;">
 <p style="clear: both;">
 
 <h3>Fabrication</h3>
@@ -49,9 +79,23 @@
 <img src="images/v3_2.jpg" style="float: left; width: 35%; margin-left: 1%; margin-bottom: 0.5em;">
 <img src="images/v3_3.jpg" style="float: left; width: 35%; margin-left: 1%; margin-bottom: 0.5em;">
 <p style="clear: both;">
+
+<p>Final design with structurally sound frame. After testing the main failure point was the gear box attachment to the motor where screws came lose after multiple drops.</p>
+<img src="images/hardware_final.jpg" style="float: left; width: 40%; margin-left: 30%; margin-bottom: 0.5em;">
+<p style="clear: both;">
 <br>
 
-<h3>Simulation</h3>
-<p>Our simulation is based off the following kinematics.</p>
-<img src="images/kinematics.png" style="float: left; width: 60%; margin-left: 20%; margin-bottom: 0.5em;">
+<h3>Test jumps</h3>
+<img src="images/testjump1.gif" style="float: left; width: 46%; margin-left: 1%; margin-bottom: 0.5em;">
+<img src="images/testjump2.gif" style="float: left; width: 51%; margin-left: 1%; margin-bottom: 0.5em;">
 <p style="clear: both;">
+
+<img src="images/jump_success.gif" style="float: left; width: 50%; margin-left: 25%; margin-bottom: 0.5em;">
+<p style="clear: both;">
+
+<h3>RIP</h3>
+<video width="49%" height="50%" style="float: left;margin-left: 25%; margin-top:0px; margin-bottom: 0.0em;" controls muted loop>
+  <source src="images/self_destruction.mov">
+  Your browser does not support the video tag.
+</video>
+<p style="clear: both;"><br>
